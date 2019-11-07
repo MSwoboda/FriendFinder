@@ -208,8 +208,6 @@
         <button type="submit" class="btn btn-primary btn-lg btn-block" id="submit"><i class="fa fa-check-circle"
                 aria-hidden="true"></i>
             Submit</button>
-
-
     </div>
 
     <!-- Optional JavaScript -->
@@ -227,23 +225,46 @@
 
 
     <script>
-
         $(document).ready(function () {
-            $("#finish").click(function () {
+            $("#submit").click(function () {
                 var answersList = [];
+               
                 $(".friend_survey").each(function () {
-
                     var questionId = $(this).attr("id");
                     var answer = $("input[name='question']:checked", $(this)).val();
 
-
-                    answersList.push({
-                        question: questionId,
-                        answer: answer
-                    });
-
+                    answersList.push(answer);
                 });
-                console.log(answersList);
+
+                var frenObj = {
+                    name: $("#userName").val().trim(),
+                    photo: $("#userPhoto").val().trim(),
+                    scores: answersList,
+                }
+                console.log(frenObj);
+
+
+                $.post("/api/friends", newReservation,
+      function(data) {
+
+        // If a table is available... tell user they are booked.
+        if (data) {
+          alert("Yay! You are officially booked!");
+        }
+
+        // If a table is available... tell user they on the waiting list.
+        else {
+          alert("Sorry you are on the wait list");
+        }
+
+        // Clear the form when submitting
+        $("#reserve-name").val("");
+        $("#reserve-phone").val("");
+        $("#reserve-email").val("");
+        $("#reserve-unique-id").val("");
+
+      });
+
             });
         });
     </script>
